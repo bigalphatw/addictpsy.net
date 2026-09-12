@@ -1,0 +1,25 @@
+---
+import { formatDate, isoDate, type Post } from '../utils/posts';
+interface Props { post: Post }
+const { post } = Astro.props;
+const { entry, url, slug, published, updated, wasUpdated } = post;
+---
+<li class="post-item">
+  <h2><a href={url}>{entry.data.title}</a></h2>
+  <p>{entry.data.description}</p>
+  <div class="meta">
+    <span class="meta-author">作者：{entry.data.author}</span>
+    <time datetime={isoDate(published)}>發佈 {formatDate(published)}</time>
+    {wasUpdated && (
+      <time datetime={isoDate(updated)} class="meta-updated">更新 {formatDate(updated)}</time>
+    )}
+    <span class="meta-views">
+      瀏覽 <span data-views-slug={slug}>—</span>
+    </span>
+  </div>
+  {entry.data.tags.length > 0 && (
+    <div class="meta">
+      {entry.data.tags.map((t) => <span class="tag">{t}</span>)}
+    </div>
+  )}
+</li>

@@ -1,0 +1,85 @@
+---
+import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
+import ViewCountScript from '../components/ViewCountScript.astro';
+import { getSortedPosts } from '../utils/posts';
+import credit from '../image-credit.json';
+
+const posts = await getSortedPosts();
+const latest = posts.slice(0, 6);
+---
+<Base
+  title="AddictPsy"
+  description="精神醫療與成癮治療的中文衛教資訊站：以實證為基礎，陪你理解診斷、治療選項與復原的每一步。"
+>
+  <div class="wrap content-col">
+    <section class="hero">
+      <span class="eyebrow">精神醫療 × 成癮治療</span>
+      <h1>復原不是意志力的競賽，<br />而是一段可以被支持的過程。</h1>
+      <p class="lead">
+        AddictPsy 提供以實證醫學為基礎的中文衛教內容，說明精神疾病與成癮的成因、
+        治療選項，以及家屬可以做的事。我們不談奇蹟，只談能走得下去的方法。
+      </p>
+      <div class="btn-row">
+        <a class="btn" href="/blog">閱讀衛教文章</a>
+        <a class="btn secondary" href="/about">關於這個網站</a>
+      </div>
+
+      <figure class="hero-media">
+        <img
+          src="/images/hero-sunrise.jpg"
+          alt="陰雲密佈的天空下，大西洋上的日出映照在海面"
+          width="1800"
+          height="1350"
+          fetchpriority="high"
+          decoding="async"
+        />
+        <figcaption>
+          攝影：{credit.artist}／{credit.license}
+        </figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>我們談些什麼</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>理解成因</h3>
+          <p>成癮如何改變大腦的酬賞系統？憂鬱與焦慮又是怎麼發生的？先理解，才談得上處理。</p>
+        </div>
+        <div class="card">
+          <h3>治療選項</h3>
+          <p>藥物治療、心理治療、團體支持各自適合什麼情況，以及它們實際能做到與做不到的事。</p>
+        </div>
+        <div class="card">
+          <h3>家屬支持</h3>
+          <p>陪伴者往往比當事人更早耗竭。如何在幫忙的同時，不把自己賠進去。</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>最新文章</h2>
+        <a href="/blog">看全部 →</a>
+      </div>
+      {latest.length === 0 ? (
+        <p class="muted-note">文章準備中，敬請期待。</p>
+      ) : (
+        <ul class="post-list">
+          {latest.map((post) => <PostCard post={post} />)}
+        </ul>
+      )}
+    </section>
+
+    <aside class="helpline">
+      <h3>正在急難中？</h3>
+      <ul>
+        <li>安心專線 <strong>1925</strong>　24 小時免付費</li>
+        <li>生命線 <strong>1995</strong>　／　張老師 <strong>1980</strong></li>
+        <li>毒品危害防制中心 <strong>0800-770-885</strong></li>
+      </ul>
+    </aside>
+  </div>
+  <ViewCountScript />
+</Base>

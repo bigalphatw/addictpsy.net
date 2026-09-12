@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import ViewCountScript from '../../components/ViewCountScript.astro';
+import { getSortedPosts } from '../../utils/posts';
+
+const posts = await getSortedPosts();
+---
+<Base
+  title="衛教文章"
+  description="精神醫療與成癮治療的中文衛教文章，依最後更新時間排序。"
+>
+  <div class="wrap content-col">
+    <h1>衛教文章</h1>
+    <p class="lead">共 {posts.length} 篇，依最後更新時間排序，最新的在前。</p>
+    {posts.length === 0 ? (
+      <p class="muted-note">文章準備中。</p>
+    ) : (
+      <ul class="post-list">
+        {posts.map((post) => <PostCard post={post} />)}
+      </ul>
+    )}
+  </div>
+  <ViewCountScript />
+</Base>

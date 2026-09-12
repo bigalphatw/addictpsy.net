@@ -1,0 +1,383 @@
+/* ============================================================
+   addictpsy.net — 全域樣式
+   防破框策略集中在「版面安全網」區塊，勿隨意刪除
+   ============================================================ */
+
+:root {
+  --bg: #fbfcfd;
+  --surface: #ffffff;
+  --surface-2: #f2f6f8;
+  --text: #1b2733;
+  --muted: #5a6b7c;
+  --accent: #0f766e;
+  --accent-hover: #115e56;
+  --accent-soft: #e6f4f1;
+  --border: #e3e9ee;
+  --shadow: 0 1px 2px rgba(16, 33, 48, .05), 0 4px 16px rgba(16, 33, 48, .05);
+  --radius: 12px;
+  --maxw: 68rem;
+  --maxw-prose: 40rem;
+  --pad-x: clamp(1rem, 5vw, 2rem);
+  --font: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC",
+          "Microsoft JhengHei", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1419;
+    --surface: #161d24;
+    --surface-2: #1c252e;
+    --text: #e6edf3;
+    --muted: #96a7b6;
+    --accent: #5eead4;
+    --accent-hover: #99f6e4;
+    --accent-soft: #16302e;
+    --border: #27313b;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 16px rgba(0, 0, 0, .25);
+  }
+}
+
+/* ---------- reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html {
+  -webkit-text-size-adjust: 100%;  /* 手機橫置時字不會被自動放大而撐破 */
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.85;               /* 中文需要較鬆的行高 */
+  font-size: 1rem;
+  letter-spacing: .01em;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================================
+   版面安全網 — 防止任何元素破框
+   ============================================================ */
+
+/* 1. 根容器絕不產生水平捲動 */
+html, body { max-width: 100%; overflow-x: clip; }
+
+/* 2. 圖片/影片/嵌入內容永遠不超過容器 */
+img, svg, video, canvas, iframe, embed, object {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 3. 文字斷行：中文正常斷，遇到超長英文字/網址才強制斷 */
+:where(p, li, dd, dt, blockquote, figcaption, td, th, h1, h2, h3, h4, h5, h6) {
+  overflow-wrap: break-word;
+  word-break: normal;              /* 不用 break-all，否則中文標點會亂斷 */
+  hyphens: auto;
+}
+
+/* 4. 網址與程式碼片段是最常見的破框元兇 */
+a, code, kbd, samp {
+  overflow-wrap: anywhere;
+}
+
+/* 5. flex / grid 子項預設 min-width:auto 會撐破容器 */
+:where(.row, .grid, .cards, .meta, .nav-links) > * { min-width: 0; }
+
+/* 6. 程式碼區塊與表格改為內部捲動，不撐破頁面 */
+pre {
+  overflow-x: auto;
+  max-width: 100%;
+  padding: 1rem;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  font-size: .875rem;
+  line-height: 1.7;
+}
+pre code { overflow-wrap: normal; white-space: pre; }
+.table-scroll { overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; }
+/* 只有手動包在 .table-scroll 裡的表格才強制最小寬度，
+   markdown 表格另有規則（見下方），否則會撐破手機版面 */
+.table-scroll table { min-width: 26rem; }
+
+/* 7. 超長標題在窄螢幕自動縮放 */
+h1 { font-size: clamp(1.65rem, 5.2vw, 2.6rem); }
+h2 { font-size: clamp(1.3rem, 3.6vw, 1.75rem); }
+h3 { font-size: clamp(1.12rem, 2.8vw, 1.3rem); }
+h1, h2, h3, h4 {
+  line-height: 1.35;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  text-wrap: pretty;
+}
+
+/* ---------- 版面容器 ---------- */
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--pad-x);
+}
+.prose { max-width: var(--maxw-prose); }
+
+main { flex: 1 0 auto; padding-block: clamp(2rem, 6vw, 3.5rem); }
+
+/* ---------- 連結 ---------- */
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-hover); text-decoration: underline; text-underline-offset: .2em; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+/* ---------- 頁首 ---------- */
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;                 /* 窄螢幕自動換行，不擠破 */
+  padding-block: .9rem;
+}
+.brand { display: flex; align-items: center; gap: .6rem; font-weight: 700; color: var(--text); font-size: 1.05rem; }
+.brand:hover { text-decoration: none; color: var(--accent); }
+.brand-mark {
+  width: 2rem; height: 2rem; flex: 0 0 auto;
+  border-radius: 8px; background: var(--accent-soft);
+  display: grid; place-items: center; color: var(--accent);
+}
+.nav-links { display: flex; gap: clamp(.75rem, 3vw, 1.5rem); flex-wrap: wrap; align-items: center; }
+.nav-links a { color: var(--muted); font-size: .95rem; font-weight: 500; }
+.nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--accent); text-decoration: none; }
+
+/* ---------- 頁尾 ---------- */
+.site-footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding-block: 2.5rem;
+  margin-top: 3rem;
+  font-size: .9rem;
+  color: var(--muted);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 2rem;
+}
+.footer-grid h4 { font-size: .95rem; color: var(--text); margin-bottom: .6rem; }
+.footer-grid ul { list-style: none; padding: 0; display: grid; gap: .4rem; }
+.footer-bottom {
+  margin-top: 2rem; padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  font-size: .85rem;
+}
+
+/* ---------- 首頁 hero ---------- */
+.hero { padding-block: clamp(2.5rem, 8vw, 4.5rem); }
+.hero p.lead {
+  font-size: clamp(1rem, 2.4vw, 1.15rem);
+  color: var(--muted);
+  margin-top: 1.1rem;
+  max-width: 34rem;
+}
+.eyebrow {
+  display: inline-block;
+  font-size: .8rem; font-weight: 600; letter-spacing: .08em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: .3rem .7rem; border-radius: 999px;
+  margin-bottom: 1rem;
+}
+.btn-row { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.8rem; }
+.btn {
+  display: inline-block;
+  padding: .7rem 1.4rem;
+  border-radius: 999px;
+  font-weight: 600; font-size: .95rem;
+  background: var(--accent); color: #fff;
+  border: 1px solid var(--accent);
+}
+.btn:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: #fff; text-decoration: none; }
+.btn.secondary { background: transparent; color: var(--accent); }
+.btn.secondary:hover { background: var(--accent-soft); color: var(--accent); }
+@media (prefers-color-scheme: dark) { .btn { color: #06221f; } .btn:hover { color: #06221f; } }
+
+/* ---------- 卡片 ---------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+.card h3 { margin-bottom: .5rem; }
+.card p { color: var(--muted); font-size: .95rem; }
+
+/* ---------- 文章列表 ---------- */
+.post-list { list-style: none; padding: 0; display: grid; gap: 1.1rem; margin-top: 2rem; }
+.post-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.4rem;
+  transition: border-color .15s ease, transform .15s ease;
+}
+.post-item:hover { border-color: var(--accent); }
+.post-item h2 { font-size: clamp(1.1rem, 3vw, 1.3rem); margin-bottom: .5rem; }
+.post-item h2 a { color: var(--text); }
+.post-item h2 a:hover { color: var(--accent); text-decoration: none; }
+.post-item p { color: var(--muted); font-size: .95rem; }
+.meta {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: .5rem .9rem;
+  font-size: .82rem; color: var(--muted);
+  margin-top: .8rem;
+}
+.tag {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: .15rem .6rem; border-radius: 999px;
+  font-size: .78rem; color: var(--muted);
+}
+
+/* ---------- 文章內頁 ---------- */
+.post-header { margin-bottom: 2.5rem; }
+.post-body > * + * { margin-top: 1.4rem; }
+.post-body h2 { margin-top: 2.6rem; padding-top: .4rem; }
+.post-body h3 { margin-top: 2rem; }
+.post-body ul, .post-body ol { padding-left: 1.4rem; display: grid; gap: .5rem; }
+.post-body li::marker { color: var(--accent); }
+.post-body blockquote {
+  border-left: 3px solid var(--accent);
+  padding: .4rem 0 .4rem 1.1rem;
+  color: var(--muted);
+  background: var(--accent-soft);
+  border-radius: 0 8px 8px 0;
+  padding-right: 1rem;
+}
+.post-body hr { border: none; border-top: 1px solid var(--border); margin-block: 2.5rem; }
+.post-body code:not(pre code) {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: .1rem .35rem; border-radius: 5px; font-size: .9em;
+}
+
+/* ---------- 醫療聲明 ---------- */
+.disclaimer {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.3rem;
+  font-size: .88rem;
+  color: var(--muted);
+  margin-top: 3rem;
+}
+.disclaimer strong { color: var(--text); }
+
+/* ---------- 求助資源 ---------- */
+.helpline {
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.2rem 1.4rem;
+  margin-top: 2rem;
+}
+.helpline h3 { color: var(--accent); font-size: 1rem; margin-bottom: .5rem; }
+.helpline ul { list-style: none; padding: 0; display: grid; gap: .45rem; font-size: .92rem; }
+
+.section-title {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
+  margin-top: 3.5rem;
+}
+.section-title a { font-size: .9rem; }
+
+/* ============================================================
+   內容欄寬 — hero 圖片寬度以此為上限（需求 4）
+   ============================================================ */
+.content-col { max-width: 48rem; }
+.content-col .cards { grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); }
+
+/* hero 圖片：等比例縮放、不裁切、不超過內文欄寬 */
+.hero-media {
+  margin: 2.5rem 0 0;
+  max-width: 100%;              /* 上限即 .content-col 的寬度 */
+}
+.hero-media img {
+  width: 100%;
+  height: auto;                 /* 等比例，永不變形 */
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.hero-media figcaption {
+  margin-top: .6rem;
+  font-size: .8rem;
+  color: var(--muted);
+  text-align: right;
+}
+
+/* 文章 meta 的各欄位 */
+.meta-author { font-weight: 600; color: var(--text); }
+.meta-updated { color: var(--accent); }
+.meta-views { font-variant-numeric: tabular-nums; }
+.muted-note { color: var(--muted); margin-top: 1.5rem; }
+.back-link { margin-top: 2.5rem; }
+.lead { color: var(--muted); font-size: clamp(1rem, 2.2vw, 1.1rem); margin-top: .9rem; }
+h1 + .lead, .post-header .lead { margin-top: 1rem; }
+.post-header .meta { margin-top: 1.4rem; }
+section + section { margin-top: 3.5rem; }
+.hero h1 { margin-top: .2rem; }
+
+/* footer 授權標示：長網址不破框 */
+.credit { line-height: 1.9; }
+.credit a { overflow-wrap: anywhere; }
+
+/* markdown 產生的表格沒有外層容器，直接讓它自己變成捲動容器 */
+.post-body .table-scroll {
+  max-width: 100%;
+  overflow-x: auto;                /* 捲動發生在容器內，頁面不會被撐破 */
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-top: 1.4rem;
+}
+.post-body .table-scroll table {
+  display: table;
+  width: 100%;
+  min-width: 30rem;                /* 保持欄位可讀，不夠寬就在容器內橫向捲動 */
+  border-collapse: collapse;
+  font-size: .92rem;
+  margin: 0;
+}
+.post-body .table-scroll td,
+.post-body .table-scroll th { border-width: 0 0 1px 0; }
+.post-body .table-scroll tr:last-child td { border-bottom: 0; }
+.post-body th, .post-body td {
+  border: 1px solid var(--border);
+  padding: .55rem .8rem;
+  text-align: left;
+  vertical-align: top;
+}
+.post-body th { background: var(--surface-2); font-weight: 600; white-space: nowrap; }

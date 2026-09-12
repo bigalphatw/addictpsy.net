@@ -1,0 +1,46 @@
+---
+import credit from '../image-credit.json';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <h4>AddictPsy</h4>
+        <p>精神醫療與成癮治療的衛教資訊站。我們相信復原是可能的，而且不必獨自面對。</p>
+      </div>
+
+      <div>
+        <h4>網站導覽</h4>
+        <ul>
+          <li><a href="/">首頁</a></li>
+          <li><a href="/blog">衛教文章</a></li>
+          <li><a href="/about">關於我們</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>緊急求助資源（台灣）</h4>
+        <ul>
+          <li>安心專線 <strong>1925</strong>（24 小時）</li>
+          <li>生命線 <strong>1995</strong></li>
+          <li>張老師 <strong>1980</strong></li>
+          <li>毒品危害防制中心 <strong>0800-770-885</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="credit">
+        首頁主視覺：<a href={credit.file_page} rel="noopener noreferrer" target="_blank">{credit.title}</a>，
+        攝影 {credit.artist}，
+        取自 <a href="https://commons.wikimedia.org/" rel="noopener noreferrer" target="_blank">Wikimedia Commons</a>，
+        授權 <a href={credit.license_url} rel="license noopener noreferrer" target="_blank">{credit.license}</a>。
+        圖片未經修改，等比例縮放顯示。
+      </p>
+      <p style="margin-top:.9rem">
+        © {year} AddictPsy。本站內容僅供衛生教育參考，不能取代專業醫療診斷或治療建議。
+      </p>
+    </div>
+  </div>
+</footer>

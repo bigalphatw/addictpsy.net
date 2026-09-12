@@ -1,0 +1,19 @@
+---
+// 一次取回全部計數填進卡片（唯讀，不會讓數字灌水）。
+// 文章列表本身是靜態 HTML，這支 script 只負責補上數字。
+---
+<script is:inline>
+  (function () {
+    var nodes = document.querySelectorAll('[data-views-slug]');
+    if (!nodes.length) return;
+    fetch('/api/views', { headers: { accept: 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : {}; })
+      .then(function (data) {
+        nodes.forEach(function (el) {
+          var n = data[el.getAttribute('data-views-slug')];
+          el.textContent = typeof n === 'number' ? n.toLocaleString('zh-TW') : '0';
+        });
+      })
+      .catch(function () { /* 計數器失效時維持「—」，不影響閱讀 */ });
+  })();
+</script>

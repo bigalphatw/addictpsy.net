@@ -1,0 +1,9 @@
+name = "addictpsy"
+compatibility_date = "2026-09-01"
+pages_build_output_dir = "dist"
+
+# 瀏覽計數器用的 KV。這裡只放 namespace id，不是金鑰，
+# 可以安全地公開在 repo 裡（實際存取權限來自 Cloudflare 帳號綁定）。
+[[kv_namespaces]]
+binding = "VIEWS"
+id = "d2fea3a0b83946a8a54b0de681420bcd"
