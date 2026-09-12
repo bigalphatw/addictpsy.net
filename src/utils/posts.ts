@@ -55,6 +55,12 @@ export async function getSortedPosts(): Promise<Post[]> {
     };
   });
 
+  // 建置日誌診斷：確認雲端環境是否真的取得了 git 歷史
+  const updatedCount = posts.filter((p) => p.wasUpdated).length;
+  console.log(
+    `[posts] ${posts.length} 篇文章，其中 ${updatedCount} 篇偵測到更新紀錄`
+  );
+
   // 需求 7：最新的在前。先比最後更新時間，同時間則比發佈時間，
   // 避免整批匯入時（更新時間全部相同）排序變成隨機。
   return posts.sort(
