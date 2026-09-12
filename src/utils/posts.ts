@@ -26,6 +26,7 @@ export type Post = {
   entry: CollectionEntry<'blog'>;
   slug: string;
   url: string;
+  cover: string;
   published: Date;
   updated: Date;
   wasUpdated: boolean;
@@ -49,6 +50,7 @@ export async function getSortedPosts(): Promise<Post[]> {
       entry,
       slug: entry.id,
       url: `/blog/${entry.id}/`,
+      cover: `/covers/${entry.id}.svg`,
       published,
       updated: safeUpdated,
       wasUpdated: safeUpdated.getTime() > published.getTime(),

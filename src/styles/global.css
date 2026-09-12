@@ -381,3 +381,46 @@ section + section { margin-top: 3.5rem; }
   vertical-align: top;
 }
 .post-body th { background: var(--surface-2); font-weight: 600; white-space: nowrap; }
+
+/* ============================================================
+   文章封面圖
+   ============================================================ */
+.post-item {
+  padding: 0;                      /* 改由 .post-item-body 負責留白，讓封面能貼齊卡片邊緣 */
+  overflow: hidden;                /* 配合圓角裁切封面 */
+}
+.post-item-body { padding: 1.4rem; min-width: 0; }
+
+.post-cover-link { display: block; line-height: 0; }
+.post-cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1200 / 630;        /* 先佔位再載入，避免版面跳動 */
+  object-fit: cover;
+  background: var(--surface-2);
+}
+
+/* 文章內頁的大封面 */
+.post-cover-full {
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  margin-top: 2rem;
+  max-width: 100%;                 /* 不超過內文欄寬 */
+}
+
+/* 卡片在較寬的螢幕改為左圖右文 */
+@media (min-width: 40rem) {
+  .post-item {
+    display: grid;
+    grid-template-columns: 15rem 1fr;
+    align-items: stretch;
+  }
+  .post-item > * { min-width: 0; }  /* grid 子項防撐破 */
+  .post-cover-link { height: 100%; }
+  .post-item .post-cover {
+    height: 100%;
+    aspect-ratio: auto;
+    min-height: 100%;
+  }
+}
