@@ -1,7 +1,7 @@
 ---
 title: "給家屬：陪伴成癮者的五個原則"
 description: "陪伴者往往比當事人更早耗竭。這篇談的是如何在幫忙的同時，不把自己賠進去。"
-author: "AddictPsy 編輯部"
+author: "潘有法"
 pubDate: 2026-08-14
 category: "家屬支持"
 tags: ["家屬", "界線", "溝通"]
